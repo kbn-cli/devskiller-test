@@ -23,7 +23,8 @@ class BooksController extends Controller
 
     public function index(Request $request)
     {
-        return BookResource::collection();
+        $books = Books::paginate(5);
+        return BookResource::collection($books);
     }
 
     public function store(PostBookRequest $request)

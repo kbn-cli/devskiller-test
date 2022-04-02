@@ -18,8 +18,24 @@ class BookResource extends JsonResource
      */
     public function toArray($request)
     {
+        $authors = $this->authors
+            ->makeHidden([
+                'pivot',
+            ]);
+
+        $reviews = [
+            'avg' => $this->reviews->avg('review'),
+            'count' => $this->reviews->count(),
+        ];
+
         return [
-            // @TODO implement
+            'id' => $this->id,
+            'isbn' =>  $this->isbn,
+            'title' => $this->title,
+            'description' => $this->description,
+            'published_year' => $this->published_year,
+            'authors' => $authors,
+            'reviews' => $reviews,
         ];
     }
 }
