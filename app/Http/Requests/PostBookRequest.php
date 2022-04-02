@@ -2,10 +2,20 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 class PostBookRequest extends FormRequest
 {
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'authors.*' => 'authors',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -18,7 +28,8 @@ class PostBookRequest extends FormRequest
             'isbn' => ['required', 'unique:books'],
             'title' => ['required'],
             'description' => ['required'],
-            'authors' => ['required'],
+            'authors' => ['required', 'array'],
+            'authors.*' => ['required', 'integer'],
             'published_year' => ['required', 'integer'],
         ];
     }

@@ -24,7 +24,7 @@ class BookResource extends JsonResource
             ]);
 
         $reviews = [
-            'avg' => $this->reviews->avg('review'),
+            'avg' => $this->reviews->avg('review') ?? 0,
             'count' => $this->reviews->count(),
         ];
 

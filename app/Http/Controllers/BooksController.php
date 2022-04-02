@@ -32,7 +32,17 @@ class BooksController extends Controller
         $book = new Book();
 
         // @TODO implement
-        $book = $book->create($request->input());
+        $input = $request->input();
+
+        $book = $book->create($input);
+
+        $authors = array_map(function ($id) {
+            return [
+                'author_id' => $id,
+            ];
+        }, $input['authors']);
+
+        $book->bookAuthors()->createMany($authors);
 
         return new BookResource($book);
     }
