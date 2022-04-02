@@ -32,6 +32,7 @@ class BooksController extends Controller
         $book = new Book();
 
         // @TODO implement
+        $book = $book->create($request->input());
 
         return new BookResource($book);
     }
