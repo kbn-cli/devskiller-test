@@ -29,6 +29,7 @@ class BookResource extends JsonResource
         ];
 
         return [
+            // @TODO implement
             'id' => $this->id,
             'isbn' =>  $this->isbn,
             'title' => $this->title,

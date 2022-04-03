@@ -26,6 +26,12 @@ class BooksReviewController extends Controller
         $bookReview = new BookReview();
 
         // @TODO implement
+        $input = $request->input();
+
+        data_set($input, 'user_id', 2);
+        data_set($input, 'book_id', $bookId);
+
+        $bookReview = $bookReview->create($input);
 
         return new BookReviewResource($bookReview);
     }

@@ -16,6 +16,17 @@ class BookReview extends Model
     protected $fillable = [
         'comment',
         'review',
+        'user_id',
+        'book_id',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'review' => 'integer',
     ];
 
     public function user()
