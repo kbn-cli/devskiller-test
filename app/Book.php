@@ -20,6 +20,15 @@ class Book extends Model
         'published_year'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'published_year' => 'integer',
+    ];
+
     public function authors()
     {
         return $this->belongsToMany(Author::class, 'book_author');
