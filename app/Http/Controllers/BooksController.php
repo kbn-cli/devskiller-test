@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Author;
 use App\Book;
 use App\BookReview;
+use App\Http\Requests\GetBookRequest;
 use App\Http\Requests\PostBookRequest;
 use App\Http\Requests\PostBookReviewRequest;
 use App\Http\Resources\BookResource;
@@ -16,14 +17,27 @@ use Illuminate\Support\Facades\DB;
 
 class BooksController extends Controller
 {
-    public function __construct()
-    {
+    protected $book;
 
+    public function __construct(Book $book)
+    {
+        $this->book = $book;
     }
 
-    public function index(Request $request)
+    public function index(GetBookRequest $request)
     {
-        $books = Book::paginate(5);
+        $input = $request->input();
+        $column = data_get($input, 'sortColumn');
+        $direction = data_get($input, 'sortDirection');
+
+        $query = $this->book->query();
+
+        if ($column !== null && $direction !== null) {
+            $query->orderBy($column, $direction);
+        }
+
+        $books = $query->paginate(5);
+
         return BookResource::collection($books);
     }
 
