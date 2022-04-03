@@ -14,6 +14,7 @@ use App\Http\Resources\BookResource;
 use App\Http\Resources\BookReviewResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class BooksController extends Controller
 {
@@ -28,17 +29,41 @@ class BooksController extends Controller
     {
         $input = $request->input();
         $column = data_get($input, 'sortColumn');
-        $direction = data_get($input, 'sortDirection');
-
+        $direction = data_get($input, 'sortDirection') ?? 'ASC';
+        $page = data_get($input, 'page') ?? 1;
         $query = $this->book->query();
 
-        if ($column !== null && $direction !== null) {
+        if (in_array($column, ['id', 'published_year'])) {
             $query->orderBy($column, $direction);
         }
 
-        $books = $query->paginate(5);
+        $books = $query->get();
 
-        return BookResource::collection($books);
+        if (in_array($column, ['avg_review'])) {
+            $callback = function ($book) {
+                return $book->reviews->avg('review');
+            };
+            switch ($direction) {
+                case 'ASC':
+                    $books = $books->sortBy($callback);
+                    break;
+                case 'DESC':
+                    $books = $books->sortByDesc($callback);
+                    break;
+            }
+        }
+
+        $perPage = 5;
+        $items = $books->forPage($page, $perPage);
+        $total = $books->count();
+        $options = [
+            'path' => url()->current(),
+            'query' => request()->query(),
+        ];
+
+        $resource = new LengthAwarePaginator($items, $total, $perPage, null, $options);
+
+        return BookResource::collection($resource);
     }
 
     public function store(PostBookRequest $request)
