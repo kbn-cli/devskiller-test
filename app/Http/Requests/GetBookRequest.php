@@ -13,7 +13,7 @@ class GetBookRequest extends FormRequest
      */
     public function rules()
     {
-        $columns = ['id', 'avg_review', 'published_year'];
+        $columns = ['title', 'avg_review', 'published_year'];
         $directions = ['ASC', 'DESC'];
         return [
             'sortColumn' => [Rule::in($columns)],

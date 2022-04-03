@@ -34,30 +34,15 @@ class BooksController extends Controller
         $query = $this->book->query();
 
         $conditions = [];
-        $isbn = data_get($input, 'isbn');
         $title = data_get($input, 'title');
-        $description = data_get($input, 'description');
-        $publishedYear = data_get($input, 'published_year');
-
-        if ($isbn !== null) {
-            array_push($conditions, ['isbn', '=', $isbn]);
-        }
 
         if ($title !== null) {
             array_push($conditions, ['title', 'like', "%$title%"]);
         }
 
-        if ($description !== null) {
-            array_push($conditions, ['description', 'like', "%$description%"]);
-        }
-
-        if ($publishedYear !== null) {
-            array_push($conditions, ['published_year', '=', $publishedYear]);
-        }
-
         $query->where($conditions);
 
-        if (in_array($column, ['id', 'published_year'])) {
+        if (in_array($column, ['title', 'published_year'])) {
             $query->orderBy($column, $direction);
         }
 
