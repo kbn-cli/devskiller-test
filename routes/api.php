@@ -16,4 +16,4 @@ use Illuminate\Http\Request;
 Route::get('/books', 'BooksController@index');
 Route::post('/books', 'BooksController@store');
 Route::post('/books/{id}/reviews', 'BooksReviewController@store');
-Route::delete('/books/{bookId}/reviews/{reviewId}', 'BooksReviewController@destroy');
+Route::delete('/books/{id}/reviews/{reviewId}', 'BooksReviewController@destroy');

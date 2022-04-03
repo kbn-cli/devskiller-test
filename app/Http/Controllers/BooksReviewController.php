@@ -9,6 +9,7 @@ use App\Book;
 use App\BookReview;
 use App\Http\Requests\PostBookRequest;
 use App\Http\Requests\PostBookReviewRequest;
+use App\Http\Requests\DeleteBookReviewRequest;
 use App\Http\Resources\BookResource;
 use App\Http\Resources\BookReviewResource;
 use Illuminate\Http\Request;
@@ -16,9 +17,11 @@ use Illuminate\Support\Facades\DB;
 
 class BooksReviewController extends Controller
 {
-    public function __construct()
-    {
+    protected $bookReview;
 
+    public function __construct(BookReview $bookReview)
+    {
+        $this->bookReview = $bookReview;
     }
 
     public function store(int $bookId, PostBookReviewRequest $request)
@@ -36,8 +39,16 @@ class BooksReviewController extends Controller
         return new BookReviewResource($bookReview);
     }
 
-    public function destroy(int $bookId, int $reviewId, Request $request)
+    public function destroy(int $bookId, int $reviewId, DeleteBookReviewRequest $request)
     {
         // @TODO implement
+        $this->bookReview
+            ->where([
+                ['id', '=', $reviewId],
+                ['book_id', '=', $bookId],
+            ])
+            ->delete();
+
+        return response([], 204);
     }
 }
